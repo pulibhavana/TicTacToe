@@ -7,15 +7,15 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class TicTacToe extends Frame implements ActionListener {
+class sample implements ActionListener {
 
-	JFrame frame=new JFrame(); 
-	JTextField[][] textfield; 
-	int count=0;
-
-	public TicTacToe(int width, int length){ 
-		frame.setLayout(new GridLayout(width,length)); 
-		textfield= new JTextField[width][length];
+	JFrame frame =new JFrame();
+	static JTextField[][] textfield;
+	int filledFields=0,length=3,width=3;
+	protected sample()
+	{
+		frame.setLayout(new GridLayout(length,width)); 
+		textfield= new JTextField[length][width];
 		for(int x=0; x<length; x++){
 			for(int y=0; y<width; y++){
 				textfield[x][y]=new JTextField();
@@ -25,44 +25,26 @@ public class TicTacToe extends Frame implements ActionListener {
 		}
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack(); 
-		frame.setVisible(true); 
+		frame.setVisible(true);
+	
 	}
+	
+	
+
+	
+	
 
 	public void actionPerformed(ActionEvent e) 
 	{  
-		    int k=0;
-			count=count+1;
-			if(count<=9)
+		   
+			
+			filledFields=filledFields+1;
+			if(filledFields<=9)
 			{
-				for(int x=0;x<3;x++)
-				{
-					//System.out.println(textfield[0][0].getText());
-					//System.out.println(textfield[0][0].getText().equals("x"));
-					if(textfield[x][0].getText().equals("x") && textfield[x][1].getText().equals("x") && textfield[x][2].getText().equals("x"))
-						System.out.println("X is winner");
-					if(textfield[x][0].getText().equals("o") && textfield[x][1].getText().equals("o") && textfield[x][2].getText().equals("o"))
-						System.out.println("O is winner");
-					
-				}
-				for(int y=0;y<3;y++)
-				{
-					if(textfield[0][y].getText().equals("x") && textfield[1][y].getText().equals("x") && textfield[2][y].getText().equals("x"))
-						System.out.println("X is winner");
-					if(textfield[0][y].getText().equals("o") && textfield[1][y].getText().equals("o") && textfield[2][y].getText().equals("o"))
-						System.out.println("o is winner");
-				}
-				
-				if(textfield[k][k].getText().equals("x") && textfield[k+1][k+1].getText().equals("x") && textfield[k+2][k+2].getText().equals("x"))
-						System.out.println("X is winner");
-				if(textfield[k][k].getText().equals("o") && textfield[k+1][k+1].getText().equals("o") && textfield[k+2][k+2].getText().equals("o"))
-						System.out.println("o is winner");
-				
-				if(textfield[0][2].getText().equals("x") && textfield[1][1].getText().equals("x") && textfield[2][0].getText().equals("x"))
-					System.out.println("X is winner");
-			    if(textfield[0][2].getText().equals("o") && textfield[1][1].getText().equals("o") && textfield[2][0].getText().equals("o"))
-					System.out.println("o is winner");
-				
-				
+				TicTacToe.rowCheck();
+				TicTacToe.columnCheck();
+				TicTacToe.leftDiagonalCheck();
+				TicTacToe.rightDiagonalCheck();
 			}
 			else
 			{
@@ -70,16 +52,116 @@ public class TicTacToe extends Frame implements ActionListener {
 			}
 			
 	}
+	
+	
+}		
+	
+	
 
 	
 
 
-
-	public static void main(String[] args)
+public class TicTacToe extends sample
+{
+	
+	
+	public static void rowCheck()
 	{
-		TicTacToe t=new TicTacToe(3,3);
+		int rowCount;
+		String textInRowFields;
+		for(int rowIndex=0;rowIndex<3;rowIndex++)
+		{
+			if(!textfield[rowIndex][0].getText().isEmpty())
+			{
+				textInRowFields=textfield[rowIndex][0].getText();
+			
+				rowCount=0;
+				for(int columnIndex=1;columnIndex<3;columnIndex++)
+				{
+			
+					if(textfield[rowIndex][columnIndex].getText().equals(textInRowFields))
+						rowCount+=1;
+				}
+				if(rowCount==2)
+					System.out.println(textInRowFields+" is winner");
+			}
+		}
+	}
+	public static void columnCheck()
+	{
+		int columnCount;
+		String textInColumnFields;
+		for(int rowIndex=0;rowIndex<3;rowIndex++)
+		{
+            textInColumnFields=textfield[0][rowIndex].getText();
+			if(!textInColumnFields.isEmpty())
+			{
+				columnCount=0;
+				for(int columnIndex=1;columnIndex<3;columnIndex++)
+				{
+					if(textfield[columnIndex][rowIndex].getText().equals(textInColumnFields))
+						columnCount+=1;
+				
+					
+				}
+				if(columnCount==2)
+					System.out.println(textInColumnFields+" is winner");
+			}	
+		}
+	}
+	public static void leftDiagonalCheck()
+	{
+		int leftDiagonalCount=0;
+		String textInLeftDiagonalFields;
+		textInLeftDiagonalFields=textfield[0][0].getText();
+		if(!textInLeftDiagonalFields.isEmpty())
+		{
+			for(int leftDiagonalIndex=1;leftDiagonalIndex<3;leftDiagonalIndex++)
+			{
+				if(textfield[leftDiagonalIndex][leftDiagonalIndex].getText().equals(textInLeftDiagonalFields))
+					leftDiagonalCount+=1;
+
+			}
+			if(leftDiagonalCount==2)
+				System.out.println(textInLeftDiagonalFields+" is winner");
+	
+			
+		}
+		
 
 	}
+	public static void rightDiagonalCheck()
+	{
+		int rightDiagonalCount=0;
+		String textInRightDiagonalFields;
+		textInRightDiagonalFields=textfield[0][2].getText();
+		if(!textInRightDiagonalFields.isEmpty())
+		{
+			for(int rowDiagIndex=1,colDiagIndex=1;rowDiagIndex<3&colDiagIndex>=0;rowDiagIndex++,colDiagIndex--)
+			{
+				if(textfield[rowDiagIndex][colDiagIndex].getText().contentEquals(textInRightDiagonalFields))
+					rightDiagonalCount+=1;
+				
+
+			}
+			if(rightDiagonalCount==2)
+				System.out.println(textInRightDiagonalFields+" is winner");
+	
+			
+		}
+		
+
+	}
+	public static void main(String[] args)
+	{
+		TicTacToe tictactoe=new TicTacToe();
+		
+	}
+	
+	
+	
+
 }
+
 
 
