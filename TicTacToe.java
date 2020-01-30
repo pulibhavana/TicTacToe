@@ -1,167 +1,107 @@
 package tw_games;
-import javax.swing.JFrame;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.*;
 
-import javax.swing.*;
+public class TicTacToe  {
 
-class sample implements ActionListener {
-
-	JFrame frame =new JFrame();
-	static JTextField[][] textfield;
-	int filledFields=0,length=3,width=3;
-	protected sample()
+	String[] grid=new String[9];
+	int[] validMoves=new int[9];
+	int chance=0,choose;
+	players p1=new players(1);
+	players p2=new players(2);
+	boolean rowFlag,colFlag,ldFlag,rdFlag,movesFlag;
+	GameResults gp=new GameResults();
+	public void inputFromPlayer()
 	{
-		frame.setLayout(new GridLayout(length,width)); 
-		textfield= new JTextField[length][width];
-		for(int x=0; x<length; x++){
-			for(int y=0; y<width; y++){
-				textfield[x][y]=new JTextField();
-				textfield[x][y].addActionListener(this);
-			    frame.add(textfield[x][y]);
-			}
-		}
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack(); 
-		frame.setVisible(true);
-	
-	}
-	
-	
-
-	
-	
-
-	public void actionPerformed(ActionEvent e) 
-	{  
-		   
-			
-			filledFields=filledFields+1;
-			if(filledFields<=9)
+		while(!gameResults())
+		{
+			if(chance%2==0 && chance<9)
 			{
-				TicTacToe.rowCheck();
-				TicTacToe.columnCheck();
-				TicTacToe.leftDiagonalCheck();
-				TicTacToe.rightDiagonalCheck();
+				player1validate();
+				chance++;
 			}
 			else
 			{
-				System.out.println("Game ends here!!");
-			}
-			
-	}
-	
-	
-}		
-	
-	
-
-	
-
-
-public class TicTacToe extends sample
-{
-	
-	
-	public static void rowCheck()
-	{
-		int rowCount;
-		String textInRowFields;
-		for(int rowIndex=0;rowIndex<3;rowIndex++)
-		{
-			if(!textfield[rowIndex][0].getText().isEmpty())
-			{
-				textInRowFields=textfield[rowIndex][0].getText();
-			
-				rowCount=0;
-				for(int columnIndex=1;columnIndex<3;columnIndex++)
+				if(chance<9)
 				{
-			
-					if(textfield[rowIndex][columnIndex].getText().equals(textInRowFields))
-						rowCount+=1;
+					player2validate();
+					chance++;
 				}
-				if(rowCount==2)
-					System.out.println(textInRowFields+" is winner");
-			}
-		}
-	}
-	public static void columnCheck()
-	{
-		int columnCount;
-		String textInColumnFields;
-		for(int rowIndex=0;rowIndex<3;rowIndex++)
-		{
-            textInColumnFields=textfield[0][rowIndex].getText();
-			if(!textInColumnFields.isEmpty())
-			{
-				columnCount=0;
-				for(int columnIndex=1;columnIndex<3;columnIndex++)
-				{
-					if(textfield[columnIndex][rowIndex].getText().equals(textInColumnFields))
-						columnCount+=1;
 				
-					
-				}
-				if(columnCount==2)
-					System.out.println(textInColumnFields+" is winner");
-			}	
-		}
-	}
-	public static void leftDiagonalCheck()
-	{
-		int leftDiagonalCount=0;
-		String textInLeftDiagonalFields;
-		textInLeftDiagonalFields=textfield[0][0].getText();
-		if(!textInLeftDiagonalFields.isEmpty())
-		{
-			for(int leftDiagonalIndex=1;leftDiagonalIndex<3;leftDiagonalIndex++)
-			{
-				if(textfield[leftDiagonalIndex][leftDiagonalIndex].getText().equals(textInLeftDiagonalFields))
-					leftDiagonalCount+=1;
-
 			}
-			if(leftDiagonalCount==2)
-				System.out.println(textInLeftDiagonalFields+" is winner");
-	
+			
 			
 		}
-		
-
 	}
-	public static void rightDiagonalCheck()
-	{
-		int rightDiagonalCount=0;
-		String textInRightDiagonalFields;
-		textInRightDiagonalFields=textfield[0][2].getText();
-		if(!textInRightDiagonalFields.isEmpty())
-		{
-			for(int rowDiagIndex=1,colDiagIndex=1;rowDiagIndex<3&colDiagIndex>=0;rowDiagIndex++,colDiagIndex--)
-			{
-				if(textfield[rowDiagIndex][colDiagIndex].getText().contentEquals(textInRightDiagonalFields))
-					rightDiagonalCount+=1;
-				
-
-			}
-			if(rightDiagonalCount==2)
-				System.out.println(textInRightDiagonalFields+" is winner");
 	
-			
+	public void player1validate()
+	{
+		choose=p1.player_input(1);
+		while(!validateInput(choose))
+		{
+			System.out.print("choose another position");
+			p1.player_input(1);
 		}
+		grid[choose]=p1.variable;
 		
-
 	}
+	
+	public void player2validate()
+	{
+		choose=p2.player_input(2);
+		while(!validateInput(choose))
+		{
+			System.out.println(" The position is filled \n "
+					+ "choose another position");
+			p2.player_input(2);
+		}
+		grid[choose]=p2.variable;
+	}
+	
+	public boolean validateInput(int input)
+	{
+		if(validMoves[input]==0)
+		{
+			validMoves[input]=1;
+			return true;
+		}
+		else
+			return false;
+		
+	}
+	public boolean gameResults()
+	{
+		
+		movesFlag=gp.gameends(grid);
+		rowFlag=gp.row_check(grid);
+		colFlag=gp.col_check(grid);
+		ldFlag=gp.left_diagonal_check(grid);
+		rdFlag=gp.right_diagonal_check(grid);
+		
+		
+		return (movesFlag||rowFlag || colFlag ||ldFlag || rdFlag);
+	}
+	
+	
+		
+	
 	public static void main(String[] args)
 	{
-		TicTacToe tictactoe=new TicTacToe();
-		
+		TicTacToe tictactoe =new TicTacToe();
+		tictactoe.inputFromPlayer();
 	}
+	
+	
+}
+
+	
+	
+
+
+	
 	
 	
 	
 
-}
+
 
 
 
