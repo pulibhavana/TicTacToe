@@ -14,23 +14,12 @@ public class TicTacToe  {
 			switch(chance%2)
 			{
 				case 0: position=p1.player_input();
-						while(!validateInput(position))
-						{
-							System.out.println("the position is filled!");
-							position=p1.player_input();
-						}
-						grid[position]=p1.variable;
+						validateInput(position,p1);
 						chance++;
 						break;
 				
 				case 1: position=p2.player_input();
-						while(!validateInput(position))
-						{
-							System.out.println("the position is filled!");
-							position=p2.player_input();
-
-						}
-						grid[position]=p2.variable;
+						validateInput(position,p2);
 						chance++;
 						break;
 				
@@ -38,26 +27,38 @@ public class TicTacToe  {
 		}
 	}
 	
-	
-	public boolean validateInput(int input)
+	public void validateInput(int input,players x)
 	{
+		int choose_again;
 		if(grid[input]==null)
-			return true;
-		return false;
+			grid[input]=x.variable;
+		else
+		{
+			System.out.println("The position is filled! enter another position");
+			choose_again=x.player_input();
+			validateInput(choose_again,x);
+		}
+		
+		
 		
 	}
 	public boolean gameEnds()
 	{
-		boolean rowFlag,colFlag,ldFlag,rdFlag,movesFlag;
+	
 		
-		movesFlag=bo.gamedraw(grid);
-		rowFlag=bo.row_check(grid);
-		colFlag=bo.col_check(grid);
-		ldFlag=bo.left_diagonal_check(grid);
-		rdFlag=bo.right_diagonal_check(grid);
+		if(bo.gamedraw(grid))
+			return true;
+		if(bo.row_check(grid))
+			return true;
+		if(bo.col_check(grid))
+			return true;
+		if(bo.left_diagonal_check(grid))
+			return true;
+		if(bo.right_diagonal_check(grid))
+			return true;
+		return false;
 		
 		
-		return (movesFlag||rowFlag || colFlag ||ldFlag || rdFlag);
 	}
 	
 	
