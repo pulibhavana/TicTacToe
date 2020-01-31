@@ -3,7 +3,7 @@ package tw_games;
 class Board 
 {
 	int flag=0;
-	public boolean gameends(String[] grid)
+	public boolean gamedraw(String[] grid)
 	{
 		flag=0;
 		for(int index=0;index<9;index++)

@@ -9,7 +9,7 @@ public class TicTacToe  {
 	Board bo=new Board();
 	public void inputFromPlayer()
 	{
-		while(!gameResults())
+		while(!gameEnds())
 		{
 			switch(chance%2)
 			{
@@ -27,7 +27,7 @@ public class TicTacToe  {
 						while(!validateInput(position))
 						{
 							System.out.println("the position is filled!");
-							position=p1.player_input();
+							position=p2.player_input();
 
 						}
 						grid[position]=p2.variable;
@@ -46,11 +46,11 @@ public class TicTacToe  {
 		return false;
 		
 	}
-	public boolean gameResults()
+	public boolean gameEnds()
 	{
 		boolean rowFlag,colFlag,ldFlag,rdFlag,movesFlag;
 		
-		movesFlag=bo.gameends(grid);
+		movesFlag=bo.gamedraw(grid);
 		rowFlag=bo.row_check(grid);
 		colFlag=bo.col_check(grid);
 		ldFlag=bo.left_diagonal_check(grid);
